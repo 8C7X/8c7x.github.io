@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>root@abyssic:~$</title>
+    <style>
+        body {
+            font-family: monospace;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        /* Lluvia de código */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Estilo de la terminal */
+        #rootCMD {
+            font-size: 16px;
+            color: limegreen;
+            background-color: black;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 150px;
+            border-top: 2px solid red;
+            font-family: monospace;
+            overflow-y: auto;
+        }
+
+        #rootCMD input {
+            width: 100%;
+            background: black;
+            color: limegreen;
+            border: none;
+            font-family: monospace;
+            font-size: 16px;
+            outline: none;
+        }
+
+        /* Sección de doxx falsos en ASCII */
+        .doxx-section {
+            display: none;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid red;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: limegreen;
+            font-family: monospace;
+            white-space: pre;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+
+<!-- Terminal root -->
+<div id="rootCMD">
+    <div class="cmdLine">root@abyssic:~$</div>
+    <input type="text" id="cmdInput" onkeydown="handleCMD(event)" placeholder="Escribe un comando...">
+</div>
+
+<!-- Sección de Doxx Falsos en ASCII -->
+<div id="doxxSection" class="doxx-section">
+    <h2>DOXX FALSOS</h2>
+    <pre>
+    ██████╗  ██████╗ ██╗  ██╗███████╗
+    ██╔══██╗██╔═══██╗██║  ██║██╔════╝
+    ██████╔╝██║   ██║███████║███████╗
+    ██╔═══╝ ██║   ██║██╔══██║╚════██║
+    ██║     ╚██████╔╝██║  ██║███████║
+    ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝
+
+    Persona 1:
+    Nombre: John Doe
+    Dirección: 123 Fake St, Faketown, USA
+    Teléfono: +1-555-1234
+    Email: johndoe@fakeemail.com
+
+    Persona 2:
+    Nombre: Jane Smith
+    Dirección: 456 Imaginary Rd, Nowhere, UK
+    Teléfono: +44-777-9876
+    Email: janesmith@fakeemail.com
+    </pre>
+</div>
+
+<script>
+    // Lluvia de código binario
+    let canvas = document.getElementById("matrixCanvas");
+    let ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let columns = Math.floor(canvas.width / 20);
+    let drops = Array(columns).fill(0);
+    let speed = 40;
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "red";
+        ctx.font = "20px monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+            let text = Math.random() > 0.5 ? "1" : "0";
+            ctx.fillText(text, i * 20, drops[i] * 20);
+            if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+
+    setInterval(drawMatrix, speed);
+
+    // Función para ejecutar comandos
+    function handleCMD(event) {
+        if (event.key === 'Enter') {
+            let cmdInput = document.getElementById('cmdInput').value.trim();
+            let cmdLine = document.createElement('div');
+            cmdLine.classList.add('cmdLine');
+
+            if (cmdInput.startsWith('ip lookup ')) {
+                let ip = cmdInput.replace('ip lookup ', '');
+                cmdLine.innerHTML = `root@abyssic:~$ IP: ${ip}<br>
+                Ubicación: Cyberlandia<br>
+                ISP: FakeISP<br>
+                País: Fictilandia<br>
+                Latitud: 51.5074<br>
+                Longitud: -0.1278`;
+            } else if (cmdInput.startsWith('phone lookup ')) {
+                let number = cmdInput.replace('phone lookup ', '');
+                cmdLine.innerHTML = `root@abyssic:~$ Número: ${number}<br>
+                Operador: FakeTel<br>
+                Ubicación: Faketown, USA<br>
+                Modelo de teléfono: XYZ-2000<br>
+                Email asociado: fakeemail@fakemail.com`;
+            } else if (cmdInput === 'abyssic') {
+                cmdLine.innerHTML = 'root@abyssic:~$ Activando modo ABYSSIC...';
+                speed = 5; // Aumenta la velocidad de la lluvia binaria
+            } else if (cmdInput === 'doxx') {
+                document.getElementById('doxxSection').style.display = 'block';
+                cmdLine.innerHTML = 'root@abyssic:~$ Mostrando doxx falsos...';
+            } else {
+                cmdLine.innerHTML = 'root@abyssic:~$ Comando no reconocido';
+            }
+
+            document.getElementById('rootCMD').appendChild(cmdLine);
+            document.getElementById('cmdInput').value = '';
+        }
+    }
+</script>
+
+</body>
+</html>
